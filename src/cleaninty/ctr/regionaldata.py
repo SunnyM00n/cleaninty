@@ -4,6 +4,7 @@ import typing
 __all__ = [
 	"Region",
 	"Country",
+    "State",
 	"Language"
 ]
 
@@ -296,11 +297,40 @@ class Language(IntEnum):
 		if region == Region.TWN:
 			return (cls.ZH_TRAD,)
 		if region == Region.USA:
-			return (cls.EN, cls.FR, cls.ES, cls.PT)
+            if Country == Country.US
+                return (cls.EN, cls.ES,)
+            if Country == Country.CA
+                return (cls.EN, cls.FR,)
+            if Country == Country.ME
+                return (cls.ES,)
+            else:
+                return (cls.EN, cls.FR, cls.ES, cls.PT)
 		if region == Region.EUR:
-			return (cls.EN, cls.FR, cls.DE, cls.ES, cls.IT, cls.NL, cls.PT, cls.RU)
+			if Country == Country.GB:
+				return (cls.EN,)
+			if Country == Country.FR:
+				return (cls.FR)
+			if Country == Country.DE:
+				return (cls.DE,)
+			if Country == Country.AT:
+				return (cls.DE,)
+			if Country == Country.IT:
+				return (cls.IT,)
+			if Country == Country.ES:
+				return (cls.ES,)
+			if Country == Country.NL:
+				return (cls.NL,)
+			if Country == Country.PT:
+				return (cls.PT,)
+			if Country == Country.RU:
+				return (cls.RU,)
+			if Country == Country.AU:
+				return (cls.EN,)
+			else:
+				return (cls.EN,)
 		return None
 
 RegionType = typing.Union[Region, typing.SupportsInt, str]
 CountryType = typing.Union[Country, typing.SupportsInt, str]
+StateType = typing.Union[State, typing.SupportsInt, str]
 LanguageType = typing.Union[Language, typing.SupportsInt, str]
