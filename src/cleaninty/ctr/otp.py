@@ -164,9 +164,15 @@ class CTCert(certificate.Certificate):
 
 		try:
 			privkey = ec.derive_private_key(otp.ct_cert_privk, ec.SECT233R1(), default_backend())
-			pubkeynumbers = privkey.public_key().public_numbers()
+		except ValueError:
+			try:
+				privkey = ec.derive_private_key(otp.ct_cert_privk % 0x1000000000000000000000000000013E974E72F8A6922031D2603CFE0D7, ec.SECT233R1(), default_backend())
+			except Exception as e:
+				raise ClassInitError("EC Key derivation error") from e
 		except Exception as e:
 			raise ClassInitError("EC Key derivation error") from e
+
+		pubkeynumbers = privkey.public_key().public_numbers()
 
 		try:
 			data = pack(
