@@ -574,9 +574,15 @@ def _configure_cli_cert_and_key(enc_cert: bytes, enc_key: bytes):
 				default_backend()
 			).decryptor()
 			_key = decryptor.update(enc_key[16:]) + decryptor.finalize()
+			
+			# strip trailing bytes: decrypted key blob contains DER key + struct padding.
+            # OpenSSL 1.1 tolerated this, OpenSSL 3 rejects it unless sliced to DER length.
+			if _key[:2] != b"\x30\x82":
+				continue
 
-			key = serialization.load_der_private_key(_key, password=None)
-
+			size = unpack(">2xH", _key[:4])[0]
+			key = serialization.load_der_private_key(_key[:size+4], password=None)
+			
 			k1 = cert.public_key()
 			k2 = key.public_key()
 
